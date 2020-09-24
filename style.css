@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0303;
+}
+
+#top-container {
+    background-color: lightblue;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 6px -6px rgba(170, 170, 170, 0.8);
+}
+
+.chose {
+    /* appearance: none; */
+    border: none;
+    background: none;
+    outline: none;
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    border-bottom: solid 3px rgb(255, 255, 255, 2);
+    font-size: 20px;
+}
+
+#display,
+#contributors {
+    background: #ffffff;
+    width: calc(45% - 1rem);
+    margin: 1rem;
+    margin-left: 0px;
+    box-shadow: 0 8px 6px -6px rgba(170, 170, 170, 0.8);
+    padding: 10px;
+}
+
+.display-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.repository-info,
+.description-info,
+.forks-info,
+.update-info,
+.contributor-title {
+    box-shadow: 0 3px 2px -3px rgba(170, 170, 170, 0.8);
+    width: 100%;
+    padding: 20px;
+}
+
+.contributor-title {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: rgb(189, 184, 184);
+}
+
+@media only screen and (max-width: 600px) {
+    .display-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #top-container {
+        flex-direction: column;
+    }
+    #display,
+    #contributors {
+        width: 80%;
+    }
+    .chose {
+        padding-top: 30px;
+    }
+}
+
+.list {
+    list-style: none;
+}
+
+.user-img {
+    width: 50px;
+}
+
+.user-list {
+    box-shadow: 0 3px 2px -3px rgba(170, 170, 170, 0.8);
+    width: 100%;
+    padding: 20p;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.users {
+    background: gray;
+    color: #fff;
+    font-weight: 500;
+    width: 30px;
+    height: 20px;
+    text-align: center;
+    border-radius: 20%;
+    padding: 0;
+}
+
+.list {
+    width: 100%;
+    max-width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin: 25px auto;
+}
