@@ -56,86 +56,50 @@ function main() {
     contributor.appendChild(contributorsDiv);
     contributorsDiv.appendChild(ulEl);
     ulEl.setAttribute('class', 'list');
-    //pages
-    function createPage(users) {
-        const list = document.createElement('div');
-        list.setAttribute('class', 'list');
-        const pagination = document.createElement('div');
-        list.setAttribute('class', 'pagenumbers');
-        contributor.appendChild(list);
-        contributor.appendChild(pagination);
-        let currentPage = 1;
-        let rows = 5;
-        displayList(users, list, rows, currentPage);
-        setUpPages(list, pagination, rows);
-    }
 
-    function displayList(items, wapper, rowPerPages, page) {
-        wapper.innerHTML = '';
-        page--;
-        let start = rowPerPages * page;
-        let end = start + rowPerPages;
-        let paginatedItem = items.slice(start, end);
-        for (let i = 0; i < paginatedItem.length; i++) {
-            const items = paginatedItem[i];
-            const ul = document.createElement('ul');
-            ul.innerHTML = items;
-            wapper.appendChild(ul);
-        }
-    }
-
-    function setUpPages(items, wraper, rowPerPages) {
-        wraper.innerHTML = '';
-        let pageCount = Math.ceil(items.length / rowPerPages) + 1;
-        for (let i = 0; i < pageCount; i++) {
-            let btn = paginationbtn(i);
-            wraper.appendChild(btn);
-        }
-
-        function paginationbtn(page) {
-            let btn = document.createElement('button');
-            btn.innerHTML = page;
-            if (currentPage == page) btn.classList.add('active');
-            return btn;
-        }
-    }
-    // fetch data
-    let option;
-    fetchData(gitHubApi).then((data) => {
-        data.forEach((repoName) => {
-            option += `<option value='${repoName.name}'>${repoName.name}</option>`;
+    async function dropList() {
+        let option;
+        const data = await fetchData(gitHubApi);
+        data.map((listName) => {
+            option += `<option value='${listName.name}'>${listName.name}</option>`;
         });
         selector.innerHTML = option;
-    });
+    }
+    dropList();
 
     selector.addEventListener('change', getRepoInfo);
 
-    function getRepoInfo(e) {
+    async function getRepoInfo(e) {
+        console.log(e);
         let optionValue = e.target.value;
-        fetchData(gitHubApi).then((data) => {
-            data.forEach((option) => {
-                let users = [];
-                if (optionValue === option.name) {
-                    repoName.innerHTML = `<b><span>Repository: </b></span><a href ="${option.html_url}">${option.name}</a>`;
-                    repoDescriptin.innerHTML = `<p><b><span>description: </b></span>${option.description}</p>`;
-                    repoForks.innerHTML = `<p><b><span>Fork: </b></span>${option.forks}</p>`;
-                    repoUpdate.innerHTML = `<p><b><span>Update: </b></span>${option.updated_at}</p>`;
-                    fetchData(option.contributors_url).then((contributors) => {
-                        contributors.forEach((user) => {
-                            const userImage = user.avatar_url;
-                            const userGithubPage = user.html_url;
-                            const userName = user.login;
-                            const userContributuins = user.contributions;
-                            // console.log(userContributuins);
-                            users.push(
-                                `<li class="user-list"> <img class="user-img" src ="${userImage}"> <a href="${userGithubPage}">${userName}</a> <p class="users">${userContributuins}</p></li>`,
-                            );
-                        });
-                        createPage(users);
-                    });
-                }
-            });
+        let data = await fetchData(gitHubApi);
+        data.forEach((option) => {
+            showReproInfo(option, optionValue);
         });
+    }
+    async function showReproInfo(option, optionValue) {
+        if (optionValue === option.name) {
+            ulEl.innerHTML = '';
+            repoName.innerHTML = `<b><span>Repository: </b></span><a href ="${option.html_url}">${option.name}</a>`;
+            repoDescriptin.innerHTML = `<p><b><span>description: </b></span>${option.description}</p>`;
+            repoForks.innerHTML = `<p><b><span>Fork: </b></span>${option.forks}</p>`;
+            repoUpdate.innerHTML = `<p><b><span>Update: </b></span>${option.updated_at}</p>`;
+            let contributors = await fetchData(option.contributors_url);
+            console.log(contributors);
+            contributors.forEach(displayContributors);
+            console.log('new compo');
+        }
+    }
+
+    function displayContributors(user) {
+        const userImage = user.avatar_url;
+        const userGithubPage = user.html_url;
+        const userName = user.login;
+        const userContributuins = user.contributions;
+        const liEl = `<li class="user-list"> <img class="user-img" src ="${userImage}"> <a href="${userGithubPage}">${userName}</a> <p class="users">${userContributuins}</p></li>`;
+        let listLI = document.createRange().createContextualFragment(liEl);
+        ulEl.appendChild(listLI);
+        console.log('append one li to Ul');
     }
 }
 main();
